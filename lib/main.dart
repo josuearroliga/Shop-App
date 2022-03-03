@@ -11,15 +11,16 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //We4 should use the standard way here.
     return ChangeNotifierProvider(
       //
-      create: (ctx) => Products(),
+      create: (c) => Products(),
       //Provides an instance of this class to all childs interested.
       child: MaterialApp(
         title: 'MyShop',
         theme: ThemeData(
-          primarySwatch: Colors.pink,
-          accentColor: Colors.white70,
+          primarySwatch: Colors.deepPurple,
+          accentColor: Colors.red.shade700,
           fontFamily: 'Lato',
         ),
         home: ProductsOverviewScreen(),

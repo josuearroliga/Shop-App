@@ -11,9 +11,10 @@ class ProductDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     //Recepting the date in the route
     String ProductId = ModalRoute.of(context).settings.arguments as String;
-    final loadedProduct = Provider.of<Products>(context)
-        .items
-        .firstWhere((prod) => prod.id == ProductId);
+    // Since the provider is emiting from this class parent, we can
+    //access its data via this variable instance.
+    final loadedProduct = Provider.of<Products>(context).findById(ProductId);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(loadedProduct.title),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/product.dart';
+import 'product.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [
@@ -38,6 +38,8 @@ class Products with ChangeNotifier {
     ),
   ];
 
+//This works like a constructor, but instead, what we return is
+//a copy of the original class/object.
   List<Product> get items {
     //We return a copy because this way we can edit the items from anywhere else in the app.
     return [..._items];
@@ -47,5 +49,10 @@ class Products with ChangeNotifier {
     //_items.add(value);
     //Will let other widgets know if we made changes in this class.
     notifyListeners();
+  }
+
+  //Creating a method to find by id in argument.
+  Product findById(String id) {
+    return _items.firstWhere((prod) => prod.id == id);
   }
 }
