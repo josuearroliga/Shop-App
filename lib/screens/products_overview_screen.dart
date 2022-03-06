@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/products.dart';
 import '../providers/product.dart';
 import '../widgets/products_grid.dart';
 
@@ -13,12 +15,20 @@ class ProductsOverviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final changeFavs = Provider.of<Products>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('My Shop'),
         actions: [
           PopupMenuButton(
-            onSelected: (filterOptions selectedValue) {},
+            onSelected: (filterOptions selectedValue) {
+              if (selectedValue == filterOptions.Favorites) {
+                changeFavs.showFavoritesOnly();
+              } else {
+                changeFavs.showAll();
+              }
+            },
             icon: Icon(
               Icons.more_vert,
             ),
@@ -28,7 +38,7 @@ class ProductsOverviewScreen extends StatelessWidget {
                 value: filterOptions.Favorites,
               ),
               PopupMenuItem(
-                child: Text('Only Favorites'),
+                child: Text('All products'),
                 value: filterOptions.All,
               ),
             ],

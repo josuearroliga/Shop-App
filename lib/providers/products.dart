@@ -38,11 +38,27 @@ class Products with ChangeNotifier {
     ),
   ];
 
+  var _showFavsOnly = false;
+
 //This works like a constructor, but instead, what we return is
 //a copy of the original class/object.
+//Filtering the favorites to only display those.
   List<Product> get items {
+    if (_showFavsOnly) {
+      return _items.where((prodItem) => prodItem.isFavorite).toList();
+    }
     //We return a copy because this way we can edit the items from anywhere else in the app.
     return [..._items];
+  }
+
+  void showFavoritesOnly() {
+    _showFavsOnly = true;
+    notifyListeners();
+  }
+
+  void showAll() {
+    _showFavsOnly = false;
+    notifyListeners();
   }
 
   void addProduct() {
@@ -55,4 +71,7 @@ class Products with ChangeNotifier {
   Product findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
   }
+
+  //Elegir favoritos
+
 }

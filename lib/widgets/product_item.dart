@@ -15,6 +15,8 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Add a listener to provider
+    //We stop listening for changes as we do not need to rebuild
+    //the whole thing, we use the consumer approach for specificity.
     final product = Provider.of<Product>(context, listen: false);
     return GridTile(
       child: GestureDetector(
@@ -38,6 +40,8 @@ class ProductItem extends StatelessWidget {
               product.toggleFavStatus();
             },
             color: Theme.of(context).accentColor,
+            //We are only rebuilding this widget, since the main provider
+            //that is up is set not to listen.
             icon: Consumer<Product>(
               builder: (ctx, product, child) => Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
