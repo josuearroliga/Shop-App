@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/providers/products.dart';
+import 'package:flutter_complete_guide/providers/cart.dart';
+import '../providers/products.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/product_details_screen.dart';
@@ -18,6 +19,8 @@ class ProductItem extends StatelessWidget {
     //We stop listening for changes as we do not need to rebuild
     //the whole thing, we use the consumer approach for specificity.
     final product = Provider.of<Product>(context, listen: false);
+    final cart = Provider.of<Cart>(context, listen: false);
+
     return GridTile(
       child: GestureDetector(
         onTap: () {
@@ -29,17 +32,18 @@ class ProductItem extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       ),
+
       //To make its border rounded.
       footer: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: GridTileBar(
-          backgroundColor: Colors.black87,
+          backgroundColor: Colors.blueGrey[900],
           leading: IconButton(
             iconSize: 22,
             onPressed: () {
               product.toggleFavStatus();
             },
-            color: Theme.of(context).accentColor,
+            color: Theme.of(context).primaryColorLight,
             //We are only rebuilding this widget, since the main provider
             //that is up is set not to listen.
             icon: Consumer<Product>(
@@ -53,8 +57,10 @@ class ProductItem extends StatelessWidget {
           ),
           trailing: IconButton(
             icon: Icon(Icons.shopping_cart),
-            onPressed: () {},
-            color: Theme.of(context).accentColor,
+            onPressed: () {
+              cart.addItem(product.id, product.price, product.title);
+            },
+            color: Theme.of(context).primaryColorDark,
           ),
         ),
       ),

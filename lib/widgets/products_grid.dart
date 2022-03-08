@@ -7,13 +7,18 @@ import '../screens/products_overview_screen.dart';
 import '../providers/product.dart';
 
 class ProductsGrid extends StatelessWidget {
+  bool favState;
+
+  ProductsGrid(this.favState);
+
   @override
   Widget build(BuildContext context) {
     //We explicitly tell dart that we are expecting changes on this
     //class only.
     final productsData = Provider.of<Products>(context);
     //
-    final products = productsData.items;
+    final products =
+        favState == true ? productsData.itemFavorites : productsData.items;
 
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
