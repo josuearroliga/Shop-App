@@ -16,11 +16,26 @@ class CartItem {
 
 class Cart with ChangeNotifier {
 //To load the cart products
-  Map<String, CartItem> _items;
+  Map<String, CartItem> _items = {};
 
   //Getter
   Map<String, CartItem> get items {
     return {..._items};
+  }
+
+  //Count the amount of items
+  int get itemCount {
+    return _items.length;
+  }
+
+//Calculates the totala mount of the cart.
+  double get totalAmount {
+    double total = 0.0;
+    _items.forEach((key, CartItem) {
+      total += CartItem.price * CartItem.quantity;
+    });
+
+    return total;
   }
 
 //To add products
@@ -45,5 +60,6 @@ class Cart with ChangeNotifier {
               quantity: 1,
               price: price));
     }
+    notifyListeners();
   }
 }
