@@ -28,6 +28,17 @@ class Cart with ChangeNotifier {
     return _items.length;
   }
 
+  //Remoe an item
+  void removeItem(String productId) {
+    _items.remove(productId);
+    notifyListeners();
+  }
+
+  void clear() {
+    _items = {};
+    notifyListeners();
+  }
+
 //Calculates the totala mount of the cart.
   double get totalAmount {
     double total = 0.0;

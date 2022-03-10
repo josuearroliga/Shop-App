@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_complete_guide/screens/orders_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart.dart';
@@ -8,6 +9,7 @@ import './screens/product_details_screen.dart';
 import './screens/products_overview_screen.dart';
 import './widgets/product_item.dart';
 import 'providers/products.dart';
+import '../providers/orders.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -30,6 +32,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           //
           create: (c) => Cart(),
+        ),
+        ChangeNotifierProvider(
+          //
+          create: (c) => Orders(),
         ),
       ],
 
@@ -62,6 +68,8 @@ class MyApp extends StatelessWidget {
         routes: {
           ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
           CartScreen.routeName: (ctx) => CartScreen(),
+          OrdersScreen.routeName: (ctx) => OrdersScreen(),
+          ProductsOverviewScreen.routeName: (ctx) => ProductsOverviewScreen(),
         },
       ),
     );
