@@ -10,7 +10,7 @@ class Products with ChangeNotifier {
       description: 'A red shirt - it is pretty red!',
       price: 29.99,
       imageUrl:
-          'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
+          'https://upload.wikimedia.org/wikipedia/commons/a/aa/T-shirt_serigraphie_1_Couleur.jpg',
     ),
     Product(
       id: 'p2',
@@ -58,9 +58,18 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void addProduct() {
+  void addProduct(Product product) {
     //_items.add(value);
     //Will let other widgets know if we made changes in this class.
+    final newProduct = Product(
+      title: product.title,
+      description: product.description,
+      imageUrl: product.imageUrl,
+      price: product.price,
+      id: DateTime.now().toString(),
+    );
+    _items.add(newProduct);
+
     notifyListeners();
   }
 
