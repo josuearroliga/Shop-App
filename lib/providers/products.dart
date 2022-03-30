@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'product.dart';
 
@@ -58,19 +60,40 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void addProduct(Product product) {
+  Future<void> addProduct(Product product) {
+    final url = Uri.parse(
+        'https://flutter-project-2c9e2-default-rtdb.firebaseio.com/products.json');
+    return http
+        .post(
+      url,
+      body: json.encode({
+        'title': product.title,
+        'description': product.description,
+        'imageURL': product.imageUrl,
+        'price': product.price,
+        'isFavorite': product.isFavorite,
+      }),
+    )
+        .then((response) {
+      //We can manipulate the response, which in this case is the ID that
+      //the server creates for this item.
+      print(
+        json.decode(response.body),
+      );
+      //Will let other widgets know if we made changes in this class.
+      final newProduct = Product(
+        title: product.title,
+        description: product.description,
+        imageUrl: product.imageUrl,
+        price: product.price,
+        //The response is the originated ID in the server, we assign it to the
+        //local version of the item as well.
+        id: json.decode(response.body)['name'],
+      );
+      _items.add(newProduct);
+      notifyListeners();
+    });
     //_items.add(value);
-    //Will let other widgets know if we made changes in this class.
-    final newProduct = Product(
-      title: product.title,
-      description: product.description,
-      imageUrl: product.imageUrl,
-      price: product.price,
-      id: DateTime.now().toString(),
-    );
-    _items.add(newProduct);
-
-    notifyListeners();
   }
 
   //Creating a method to find by id in argument.
@@ -78,6 +101,17 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
+  //Adding update method.
+  void updateProduct(String id, Product newProduct) {
+    final prodIndex = _items.indexWhere((prod) => prod.id == id);
+    _items[prodIndex] = newProduct;
+    notifyListeners();
+  }
+
+  void removeProduct(String id) {
+    _items.removeWhere((prod) => prod.id == id);
+    notifyListeners();
+  }
   //Elegir favoritos
 
 }
