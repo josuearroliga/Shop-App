@@ -94,7 +94,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   //Saves when we press the save button.
   //From onFieldSubmitted
-  void _saveForm() {
+  Future<void> _saveForm() async {
+    print('Startung to save');
     //Validating fields
     final isValid = _form.currentState.validate();
     if (!isValid) {
@@ -103,6 +104,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _form.currentState.save();
     setState(() {
       isLoading = true;
+      print('Working on saving');
     });
 
     print(isLoading);
@@ -114,17 +116,44 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (_editedProduct.id != null) {
       Provider.of<Products>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
+      Navigator.of(context).pop();
     } else {
-      Provider.of<Products>(context, listen: false)
-          .addProduct(_editedProduct)
-          .then((_) {
+      try {
+        await Provider.of<Products>(context, listen: false)
+            .addProduct(_editedProduct);
+      } catch (error) {
+        await showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('An error occured!'),
+            content: Text('Something went wrong, please try again'),
+            actions: [
+              FlatButton(
+                child: Text('Okay'),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                  print('Button reached!');
+                  /* setState(() {
+                      isLoading = false;
+                    }); */
+                },
+              ),
+            ],
+          ),
+        );
+      } finally {
+        print('Then reached!');
         setState(() {
           isLoading = false;
         });
+        //Important to return something hhere, if not, the "then" added for the catch
+        //error will not be executed, return showDialog as Null for it to execute.
+
 //Go to previous page.
         Navigator.of(context).pop();
         print(isLoading);
-      });
+      }
+      ;
     }
   }
 

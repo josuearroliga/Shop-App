@@ -60,26 +60,22 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void> addProduct(Product product) {
+  Future<void> addProduct(Product product) async {
     final url = Uri.parse(
         'https://flutter-project-2c9e2-default-rtdb.firebaseio.com/products.json');
-    return http
-        .post(
-      url,
-      body: json.encode({
-        'title': product.title,
-        'description': product.description,
-        'imageURL': product.imageUrl,
-        'price': product.price,
-        'isFavorite': product.isFavorite,
-      }),
-    )
-        .then((response) {
-      //We can manipulate the response, which in this case is the ID that
-      //the server creates for this item.
-      print(
-        json.decode(response.body),
+    try {
+      //Stoere the await data into a variable.
+      final response = await http.post(
+        url,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageURL': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        }),
       );
+
       //Will let other widgets know if we made changes in this class.
       final newProduct = Product(
         title: product.title,
@@ -92,7 +88,14 @@ class Products with ChangeNotifier {
       );
       _items.add(newProduct);
       notifyListeners();
-    });
+      //We can manipulate the response, which in this case is the ID that
+      //the server creates for this item.
+
+    } catch (error) {
+      print(error);
+      throw error;
+    }
+
     //_items.add(value);
   }
 
